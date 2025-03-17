@@ -1,0 +1,30 @@
+FROM alpine:3.18 AS base
+
+# 安装基本工具
+RUN apk add --no-cache nodejs npm
+
+# 设置工作目录
+WORKDIR /app
+
+# 复制预构建的应用
+COPY .next/standalone/ ./
+COPY .next/static/ ./.next/static/
+COPY public/ ./public/
+
+# 设置环境变量
+ENV OPENAI_API_KEY="sk-bjcvlGHte8IjWfv28a065b41D6A248D6B0Ec3aEa19Ca87E1"
+ENV BASE_URL="https://api.ailiaobar.com"
+ENV CODE="Ailiaobar@2025"
+ENV CUSTOM_MODELS="-all,deepseek-r1,Spark-Pro,Spark-4.0-Ultra"
+ENV GOOGLE_API_KEY=""
+ENV PROXY_URL=""
+ENV ENABLE_MCP=""
+
+# 创建MCP目录
+RUN mkdir -p /app/app/mcp && chmod 777 /app/app/mcp
+
+# 暴露端口
+EXPOSE 3000
+
+# 启动应用
+CMD ["node", "server.js"] 

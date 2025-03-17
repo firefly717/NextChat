@@ -1,4 +1,4 @@
-FROM node:18-alpine AS base
+FROM node:18.17.1-alpine AS base
 
 FROM base AS deps
 
@@ -15,9 +15,11 @@ FROM base AS builder
 
 RUN apk update && apk add --no-cache git
 
-ENV OPENAI_API_KEY=""
+ENV OPENAI_API_KEY="sk-bjcvlGHte8IjWfv28a065b41D6A248D6B0Ec3aEa19Ca87E1"
+ENV BASE_URL="https://api.ailiaobar.com"
+ENV CODE="Ailiaobar@2025"
+ENV CUSTOM_MODELS="-all,deepseek-r1,Spark-Pro,Spark-4.0-Ultra"
 ENV GOOGLE_API_KEY=""
-ENV CODE=""
 
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
@@ -30,10 +32,12 @@ WORKDIR /app
 
 RUN apk add proxychains-ng
 
-ENV PROXY_URL=""
-ENV OPENAI_API_KEY=""
+ENV OPENAI_API_KEY="sk-bjcvlGHte8IjWfv28a065b41D6A248D6B0Ec3aEa19Ca87E1"
+ENV BASE_URL="https://api.ailiaobar.com"
+ENV CODE="Ailiaobar@2025"
+ENV CUSTOM_MODELS="-all,deepseek-r1,Spark-Pro,Spark-4.0-Ultra"
 ENV GOOGLE_API_KEY=""
-ENV CODE=""
+ENV PROXY_URL=""
 ENV ENABLE_MCP=""
 
 COPY --from=builder /app/public ./public

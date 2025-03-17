@@ -1,38 +1,44 @@
 version: "3.9"
 services:
   chatgpt-next-web:
-    profiles: [ "no-proxy" ]
-    container_name: chatgpt-next-web
-    image: yidadaa/chatgpt-next-web
+    profiles: ["no-proxy"]
+    container_name: ai-chat-bar
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - 3000:3000
     environment:
-      - OPENAI_API_KEY=$OPENAI_API_KEY
-      - GOOGLE_API_KEY=$GOOGLE_API_KEY
-      - CODE=$CODE
-      - BASE_URL=$BASE_URL
-      - OPENAI_ORG_ID=$OPENAI_ORG_ID
-      - HIDE_USER_API_KEY=$HIDE_USER_API_KEY
-      - DISABLE_GPT4=$DISABLE_GPT4
-      - ENABLE_BALANCE_QUERY=$ENABLE_BALANCE_QUERY
-      - DISABLE_FAST_LINK=$DISABLE_FAST_LINK
-      - OPENAI_SB=$OPENAI_SB
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-sk-bjcvlGHte8IjWfv28a065b41D6A248D6B0Ec3aEa19Ca87E1}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY:-}
+      - CODE=${CODE:-Ailiaobar@2025}
+      - BASE_URL=${BASE_URL:-https://api.ailiaobar.com}
+      - CUSTOM_MODELS=${CUSTOM_MODELS:--all,deepseek-r1,Spark-Pro,Spark-4.0-Ultra}
+      - OPENAI_ORG_ID=${OPENAI_ORG_ID:-}
+      - HIDE_USER_API_KEY=${HIDE_USER_API_KEY:-}
+      - DISABLE_GPT4=${DISABLE_GPT4:-}
+      - ENABLE_BALANCE_QUERY=${ENABLE_BALANCE_QUERY:-}
+      - DISABLE_FAST_LINK=${DISABLE_FAST_LINK:-}
+      - OPENAI_SB=${OPENAI_SB:-}
 
   chatgpt-next-web-proxy:
-    profiles: [ "proxy" ]
-    container_name: chatgpt-next-web-proxy
-    image: yidadaa/chatgpt-next-web
+    profiles: ["proxy"]
+    container_name: ai-chat-bar-proxy
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - 3000:3000
     environment:
-      - OPENAI_API_KEY=$OPENAI_API_KEY
-      - GOOGLE_API_KEY=$GOOGLE_API_KEY
-      - CODE=$CODE
-      - PROXY_URL=$PROXY_URL
-      - BASE_URL=$BASE_URL
-      - OPENAI_ORG_ID=$OPENAI_ORG_ID
-      - HIDE_USER_API_KEY=$HIDE_USER_API_KEY
-      - DISABLE_GPT4=$DISABLE_GPT4
-      - ENABLE_BALANCE_QUERY=$ENABLE_BALANCE_QUERY
-      - DISABLE_FAST_LINK=$DISABLE_FAST_LINK
-      - OPENAI_SB=$OPENAI_SB
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-sk-bjcvlGHte8IjWfv28a065b41D6A248D6B0Ec3aEa19Ca87E1}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY:-}
+      - CODE=${CODE:-Ailiaobar@2025}
+      - PROXY_URL=${PROXY_URL:-}
+      - BASE_URL=${BASE_URL:-https://api.ailiaobar.com}
+      - CUSTOM_MODELS=${CUSTOM_MODELS:--all,deepseek-r1,Spark-Pro,Spark-4.0-Ultra}
+      - OPENAI_ORG_ID=${OPENAI_ORG_ID:-}
+      - HIDE_USER_API_KEY=${HIDE_USER_API_KEY:-}
+      - DISABLE_GPT4=${DISABLE_GPT4:-}
+      - ENABLE_BALANCE_QUERY=${ENABLE_BALANCE_QUERY:-}
+      - DISABLE_FAST_LINK=${DISABLE_FAST_LINK:-}
+      - OPENAI_SB=${OPENAI_SB:-}

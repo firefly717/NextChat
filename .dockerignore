@@ -54,7 +54,8 @@ typings
 .env*.local
 
 # Next.js build output
-.next
+# 允许复制.next目录
+# .next
 out
 
 # Nuxt.js build output
