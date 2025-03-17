@@ -1,18 +1,21 @@
+import React from "react";
 import {
   FETCH_COMMIT_URL,
   FETCH_TAG_URL,
   ModelProvider,
   StoreKey,
 } from "../constant";
-import { getClientConfig } from "../config/client";
+import { getClientConfig as getConfig } from "../config/client";
 import { createPersistStore } from "../utils/store";
 import { clientUpdate } from "../utils";
 import ChatGptIcon from "../icons/chatgpt.png";
 import Locale from "../locales";
 import { ClientApi } from "../client/api";
+import { notification } from "antd";
+import Link from "next/link";
 
 const ONE_MINUTE = 60 * 1000;
-const isApp = !!getClientConfig()?.isApp;
+const isApp = !!getConfig()?.isApp;
 
 function formatVersionDate(t: string) {
   const d = new Date(+t);
@@ -71,9 +74,7 @@ export const useUpdateStore = createPersistStore(
     async getLatestVersion(force = false) {
       const versionType = get().versionType;
       let version =
-        versionType === "date"
-          ? getClientConfig()?.commitDate
-          : getClientConfig()?.version;
+        versionType === "date" ? getConfig()?.commitDate : getConfig()?.version;
 
       set(() => ({ version }));
 
@@ -105,7 +106,7 @@ export const useUpdateStore = createPersistStore(
                       if (version === remoteId) {
                         // Show a notification using Tauri
                         window.__TAURI__?.notification.sendNotification({
-                          title: "NextChat",
+                          title: "AI聊吧",
                           body: `${Locale.Settings.Update.IsLatest}`,
                           icon: `${ChatGptIcon.src}`,
                           sound: "Default",
@@ -115,7 +116,7 @@ export const useUpdateStore = createPersistStore(
                           Locale.Settings.Update.FoundUpdate(`${remoteId}`);
                         // Show a notification for the new version using Tauri
                         window.__TAURI__?.notification.sendNotification({
-                          title: "NextChat",
+                          title: "AI聊吧",
                           body: updateMessage,
                           icon: `${ChatGptIcon.src}`,
                           sound: "Default",
@@ -162,3 +163,53 @@ export const useUpdateStore = createPersistStore(
     version: 1,
   },
 );
+
+export function getClientConfig() {
+  return getConfig();
+}
+
+export function checkUpdate(
+  currentVersion: string,
+  remoteVersion: string | null,
+  updateUrl: string | null,
+) {
+  try {
+    if (remoteVersion && remoteVersion !== currentVersion) {
+      notification.success({
+        message: Locale.Settings.Update.FoundUpdate(remoteVersion ?? "unknown"),
+        description: React.createElement(
+          "div",
+          { style: { wordBreak: "break-all" } },
+          React.createElement(
+            "p",
+            null,
+            `${Locale.Settings.Update.Version(remoteVersion ?? "unknown")}`,
+          ),
+          updateUrl &&
+            React.createElement(
+              Link,
+              { href: updateUrl, target: "_blank" },
+              updateUrl,
+            ),
+        ),
+        duration: 0,
+        placement: "top",
+        key: "update",
+      });
+    } else {
+      notification.info({
+        message: Locale.Settings.Update.IsLatest,
+        description: `${Locale.Settings.Update.Version(currentVersion)}`,
+        placement: "top",
+        duration: 3,
+      });
+    }
+  } catch (error) {
+    console.error("[Check Update]", error);
+    notification.error({
+      message: "Check Update Failed",
+      description: (error as Error).message,
+      placement: "top",
+    });
+  }
+}
