@@ -100,6 +100,10 @@ if (mode !== "export") {
         source: "/api/proxy/alibaba/:path*",
         destination: "https://dashscope.aliyuncs.com/api/:path*",
       },
+      {
+        source: "/api/proxy/raw/:path*",
+        destination: "https://raw.githubusercontent.com/:path*",
+      },
     ];
 
     return {

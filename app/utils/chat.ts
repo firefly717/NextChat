@@ -542,6 +542,13 @@ export function streamWithThink(
       () => controller.abort(),
       REQUEST_TIMEOUT_MS,
     );
+    console.log(
+      "[Request] start",
+      "chatPath===>",
+      chatPath,
+      "chatPayload===>",
+      chatPayload,
+    );
     fetchEventSource(chatPath, {
       fetch: tauriFetch as any,
       ...chatPayload,
